@@ -1,12 +1,30 @@
 # Docker Application Deployment
 
-## Step 1: Deploy a Sample Web Application Using Docker Containers
+## Author Information
+- **Roll Number**: G23AI2002
+- **Name**: Dinesh Periyasamy
+![image](https://github.com/user-attachments/assets/3ffbdb32-682a-4a72-9b92-67b2959c8a11)
+
+## Introduction
+This project demonstrates the deployment of a portfolio web application using custom Docker images created from scratch. The application uses HTML, CSS, Bootstrap for the frontend, and JavaScript for scripting. Docker images are built from scratch, ensuring a tailored and lightweight environment.
+
+## Application Functionality
+Frontend: The portfolio website showcases various projects and skills. It includes:
+
+HTML: Provides the structure and content of the pages.
+CSS: Styles the content and layouts, enhancing the visual appearance.
+Bootstrap: Utilized for responsive design and UI components.
+JavaScript: Adds interactive elements and dynamic behavior to the site.
+
+
+
+## Step 1: Deploy My Portfoloio Web Application Using Docker Containers
 
 ### Prerequisites
 - Windows OS
 - Docker Desktop
 - Git
-- Code Editor (e.g., Visual Studio Code)
+- Code Editor (Visual Studio Code)
 
 ### Process
 
@@ -21,30 +39,31 @@
      cd my-docker-app
      ```
 
-3. **Create a Simple Web Application**
-   - Create a `app.py` file with the following content:
-     ```python
-     from flask import Flask
-     
-     app = Flask(__name__)
-     
-     @app.route('/')
-     def hello_world():
-         return 'Hello, World!'
-     
-     if __name__ == '__main__':
-         app.run(host='0.0.0.0')
-     ```
-
+3. **Created my Portfolio Web Application**
+    
 4. **Create a Dockerfile**
    - Create a `Dockerfile` with the following content:
      ```dockerfile
-     FROM python:3.8-slim
-     WORKDIR /app
-     COPY . /app
-     RUN pip install flask
-     EXPOSE 5000
-     CMD ["python", "app.py"]
+FROM scratch
+
+# Add Ubuntu root filesystem
+ADD rootfs.tar.gz /
+
+# Install nginx
+RUN apt-get update && \
+    apt-get install -y nginx && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy custom nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/
+
+
+COPY public_html /var/www/html
+
+# Expose the port that your application runs on (e.g., 80 for a web server)
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
      ```
 
 5. **Build the Docker Image**
@@ -62,7 +81,6 @@
 7. **Verify the Deployment**
    - Open your web browser and go to `http://localhost:5000`.
 
-## Step 2: Author Information
-- **Roll Number**: G23AI2002
-- **Name**: Dinesh Periyasamy
 
+## References
+Docker Documentation - https://docs.docker.com/
